@@ -9,7 +9,10 @@ import json
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 from art import text2art
+import signal
+import sys
 
+# Data jalur dan plugin yang lebih lengkap
 paths = [
     "/wp-config.php", "/xmlrpc.php", "/readme.html", "/license.txt", "/robots.txt",
     "/sitemap.xml", "/.env", "/wp-content/debug.log", "/.htaccess", "/backup.zip",
@@ -23,7 +26,6 @@ paths = [
     "/config.yaml", "/config.json", "/database.json", "/config.inc", "/local.xml"
 ]
 
-# Plugin yang rentan
 plugins = [
     "elementor", "woocommerce", "revslider", "wpforms", "contact-form-7",
     "yoast-seo", "all-in-one-seo-pack", "classic-editor", "wp-super-cache",
@@ -113,11 +115,21 @@ user_agents = [
 
 results = {"success": [], "protected": [], "not_found": [], "errors": [], "subdomains": [], "plugins_found": [], "api_endpoints": []}
 
-# Mengatur hasil dalam JSON
+# Menangani Ctrl+C untuk menghentikan skrip dengan cara yang bersih
+def handle_interrupt(signal, frame):
+    print(colored("\n[!] Skrip dihentikan oleh pengguna.", "red"))
+    save_results()  # Simpan hasil saat penghentian
+    sys.exit(0)
+
+# Mengatur hasil dalam JSON dengan format yang lebih keren
 def save_results():
-    with open("scan_results.json", "w") as outfile:
-        json.dump(results, outfile, indent=4)
-    print(colored("\n[+] Hasil pemindaian disimpan di scan_results.json\n", "blue"))
+    print(colored("\n[+] Menyimpan hasil pemindaian...\n", "cyan"))
+    file_name = input(colored("[?] Masukkan nama file penyimpanan PDF (biarkan kosong untuk default): ", "yellow")).strip()
+    if not file_name:
+        file_name = "scan_hasil.json"
+    with open(file_name, "w") as outfile:
+        json.dump(results, outfile, indent=4, sort_keys=True)
+    print(colored(f"[+] Hasil pemindaian disimpan di {file_name}\n", "blue"))
 
 # Membuat laporan PDF yang lebih canggih
 def create_pdf_report(report_name):
@@ -126,7 +138,7 @@ def create_pdf_report(report_name):
 
     # Header dengan logo dan desain keren
     pdf.set_font("Arial", style='B', size=16)
-    pdf.cell(200, 10, txt="Laporan Pemindaian Keamanan WordPress By RenXploit 🗿👍", ln=True, align="C")
+    pdf.cell(200, 10, txt="Laporan Pemindaian Keamanan WordPress By RenXploit👑", ln=True, align="C")
     pdf.ln(10)
 
     # Menambahkan nama laporan
@@ -142,13 +154,17 @@ def create_pdf_report(report_name):
 
     # Memasukkan hasil dalam tabel dengan warna dan padding
     pdf.set_font("Arial", size=10)
-    categories = ['success', 'protected', 'not_found', 'errors']
+    categories = ['success', 'protected', 'not_found', 'errors', 'subdomains']
     for category in categories:
         if results[category]:
             pdf.set_fill_color(200, 220, 255)  # Warna untuk baris kategori
             pdf.cell(40, 10, category.capitalize(), border=1, fill=True, align='C')
             for url in results[category]:
-                pdf.cell(0, 10, url, border=1, align='C')
+                # Cek dan pastikan URL valid dan tidak kosong
+                if isinstance(url, str) and url.strip() != "":
+                    pdf.cell(0, 10, url, border=1, align='C')
+                else:
+                    pdf.cell(0, 10, "URL tidak valid", border=1, align='C')
                 pdf.ln()
             pdf.ln(2)  # Spasi antar kategori
 
@@ -159,7 +175,7 @@ def create_pdf_report(report_name):
 # Pemindaian subdomain
 def find_subdomains(domain):
     print(colored("\n[+] Memulai pemindaian subdomain...\n", "cyan"))
-    subdomains = [
+      subdomains = [
         "www", "mail", "ftp", "cpanel", "webmail", "blog", "dev", "shop", "staging", "test",
         "admin", "m", "secure", "support", "portal", "shop", "app", "api", "cloud", "web", 
         "store", "test1", "beta", "help", "dev1", "img", "media", "events", "forum", "news", 
@@ -299,9 +315,8 @@ def summarize_results():
 
 # Fungsi utama untuk menjalankan pemindaian
 def main():
-    print(colored(text2art("Ren", font="block"), "cyan"))
-    print('script nya masih belum stabil!!!')
-    print(' ')
+    signal.signal(signal.SIGINT, handle_interrupt)  # Menangkap Ctrl+C
+    print(colored(text2art("WP Scanner", font="block"), "cyan"))
     target_url = input(colored("[?] Masukkan URL target (contoh: https://example.com): ", "yellow")).strip()
     domain = re.sub(r"https?://(www\.)?", "", target_url).split("/")[0]
     find_subdomains(domain)
@@ -315,9 +330,14 @@ def main():
     scan_api_endpoints(target_url)
     summarize_results()
 
-# Input untuk nama laporan PDF
-    report_name = input(colored("[?] Masukkan nama untukenyimpan laporan dengan PDF: ", "yellow")).strip()
+    # Input untuk nama laporan PDF
+    report_name = input(colored("[?] Masukkan nama untuk laporan PDF (biarkan kosong untuk default): ", "yellow")).strip()
+    if not report_name:
+        report_name = "scan_hasil"
     create_pdf_report(report_name)
+
+    # Simpan hasil pemindaian ke file JSON
+    save_results()
 
 if __name__ == "__main__":
     main()
