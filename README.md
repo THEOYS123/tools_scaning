@@ -36,7 +36,7 @@ python scan.py
 
 <p align="center">
   <a href="https://g.top4top.io/p_33173xdew5.jpg">
-    <img src="https://f.top4top.io/p_3305ofiqh7.jpg" width="1500" height="900" />
+    <img src="https://g.top4top.io/p_33173xdew5.jpg" width="1500" height="900" />
   </a>
 </p>
 
