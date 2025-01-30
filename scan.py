@@ -172,10 +172,9 @@ def create_pdf_report(report_name):
     pdf.output(f"{report_name}")
     print(colored(f"[+] Laporan PDF berhasil dibuat: {report_name}", "green"))
 
-# Pemindaian subdomain
 def find_subdomains(domain):
     print(colored("\n[+] Memulai pemindaian subdomain...\n", "cyan"))
-      subdomains = [
+    subdomains = [
         "www", "mail", "ftp", "cpanel", "webmail", "blog", "dev", "shop", "staging", "test",
         "admin", "m", "secure", "support", "portal", "shop", "app", "api", "cloud", "web", 
         "store", "test1", "beta", "help", "dev1", "img", "media", "events", "forum", "news", 
@@ -199,7 +198,6 @@ def find_subdomains(domain):
             print(colored(f"[+] Subdomain ditemukan: {subdomain}", "green"))
         except socket.gaierror:
             print(f"[-] Tidak ditemukan subdomain: {subdomain}")
-
 # Menghasilkan header acak untuk permintaan HTTP
 def generate_headers():
     return {
