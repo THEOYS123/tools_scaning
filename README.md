@@ -1,6 +1,8 @@
 # install && run
 ```
-pip install requests termcolor fpdf art socket
+pip install requests termcolor fpdf
+pkg install art
+pkg install socket
 git clone https://github.com/THEOYS123/tools_scaning.git
 cd tools_scaning
 python scan.py
@@ -16,8 +18,8 @@ python scan.py
 # install ulang tools
 ```
 cd
-rm -rf tools_scaning
-pip install requests termcolor fpdf art socket
+rm -rf tools_scaningpip install requests termcolor fpdf
+pkg install art
 git clone https://github.com/THEOYS123/tools_scaning.git
 cd tools_scaning
 python scan.py
