@@ -24,7 +24,7 @@
 
 tools ini efektif untuk membantu mengidentifikasi celah keamanan di situs WordPress secara otomatis dan mendalam, serta menjaga privasi dengan menggunakan rotasi proxy dan user-agent.
 
---
+
 
 # install && run
 ```
