@@ -1,6 +1,6 @@
 # *tools ini adalah alat pemindaian keamanan untuk website WordPress dengan fokus pada beberapa aspek penting:*
 
-`
+>
 
 1. Pemindaian Jalur Sensitif: Memeriksa file dan direktori yang rentan di WordPress seperti wp-config.php, readme.html, dan .htaccess yang dapat mengungkapkan informasi sensitif atau berisiko.
 
@@ -25,8 +25,6 @@
 
 
 tools ini efektif untuk membantu mengidentifikasi celah keamanan di situs WordPress secara otomatis dan mendalam, serta menjaga privasi dengan menggunakan rotasi proxy dan user-agent.
-
-`
 
 ---
 
