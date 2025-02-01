@@ -18,7 +18,8 @@ python scan.py
 # install ulang tools
 ```
 cd
-rm -rf tools_scaningpip install requests termcolor fpdf
+rm -rf tools_scaning
+pip install requests termcolor fpdf
 pkg install art
 git clone https://github.com/THEOYS123/tools_scaning.git
 cd tools_scaning
